@@ -43,7 +43,7 @@ def function_q3(epsilon):
 #So guys the result vary a LOT and it's impossible to get smth near 0 as it will directly go from -10E6 to +10E6 with "only" 100000 different beta. Playing with epsilon around 10E7 I think there are 4 zeros :
 Position=[955,14860,44590,83610]
 
-Modes=[n1*k0+100000/((n2-n1)*k0)*k for k in Position]
+Modes=[n1*k0+((n2-n1)*k0)*k/100000 for k in Position]
 
 
 #plt.plot(pa, J1/(pa*J0), c='black')
