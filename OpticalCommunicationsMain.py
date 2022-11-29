@@ -17,9 +17,10 @@ V = a* k0 * np.sqrt(n1**2 - n2**2)
 
 #Effective index is between 1.47 and 1.48 for all modes
 
-#%%
-beta = np.linspace(n2*k0, n1*k0, 1000)
-p = np.sqrt((n1*k0)**2-beta**2) 
+##Question 3
+
+beta = np.linspace(n2*k0, n1*k0, 100000) #I put 100000 instead of 1000 for precision (but takes longer)
+p = np.sqrt((n1*k0)**2-beta**2)
 q = np.emath.sqrt((n2*k0)**2 - beta**2)
 pa = p*a
 qa = q*a
@@ -28,7 +29,24 @@ J1 = scipy.special.jv(1, pa)
 K0 = scipy.special.kv(0, qa)
 K1 = scipy.special.kv(1, qa)
 
-plt.plot(pa, J1/(pa*J0), c='black')
-plt.plot(np.imag(qa), -K1/(np.imag(qa)*K0), c='red')
-plt.xlim(0, V)
-plt.ylim(-7.5, 7.5)
+
+def function_q3(epsilon):
+    position=[]
+    result=np.array([])
+    for k in range(len(beta)):
+        diff=(J1[k]/a*p[k]*J0[k])+(K1[k]/a*q[k]*K0[k])
+        result = np.append(result,diff)
+        if -epsilon < result[k] < epsilon:
+            position.append(k)
+    return(position)
+
+#So guys the result vary a LOT and it's impossible to get smth near 0 as it will directly go from -10E6 to +10E6 with "only" 100000 different beta. Playing with epsilon around 10E7 I think there are 4 zeros :
+Position=[955,14860,44590,83610]
+
+Modes=[n1*k0+100000/((n2-n1)*k0)*k for k in Position]
+
+
+#plt.plot(pa, J1/(pa*J0), c='black')
+#plt.plot(np.imag(qa), -K1/(np.imag(qa)*K0), c='red')
+#plt.xlim(0, V)
+#plt.ylim(-7.5, 7.5)
