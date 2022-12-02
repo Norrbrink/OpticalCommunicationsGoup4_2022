@@ -1,0 +1,87 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Nov 23 14:05:32 2022
+
+@author: Alexander
+"""
+import numpy as np
+import scipy.special
+import matplotlib.pyplot as plt
+#%% Initial Parameters
+n1 = 1.48
+n2 = 1.47
+a = 3.5e-6
+wavelength = 630e-9
+k0 = 2*np.pi/wavelength
+V = a* k0 * np.sqrt(n1**2 - n2**2)
+
+#Effective index is between 1.47 and 1.48 for all modes
+
+#%%
+def plotmode(m, pmp=True, TE=True):
+    Jm = scipy.special.jv(m, pa)
+    Km = scipy.special.kv(m, qa)
+    if pmp:
+        Jtop =  scipy.special.jv(m+1, pa)
+        Ktop = scipy.special.kv(m+1, qa)
+        LHS = -Ktop/(qa*Km)
+        plt.title('{}, pmp'.format(m))
+    else:
+        Jtop =  scipy.special.jv(m-1, pa)
+        Ktop = scipy.special.kv(m-1, qa)
+        LHS = Ktop/(qa*Km)
+        plt.title('{}, mpm'.format(m))
+    if TE:
+        plt.plot(pa, LHS, c='red')
+    else:
+        plt.plot(pa, (n2**2/n1**2)*LHS, c='red')
+    plt.plot(pa, Jtop/(pa*Jm), c='black')
+    plt.vlines(V, -3.5, 3.5, linestyles='dashed', color='black')
+    plt.xlabel('pa')
+    plt.xlim(0, V+0.5)
+    plt.ylim(-2.5, 2.5)
+    plt.show()
+
+
+beta = np.linspace(n2*k0, n1*k0, 1000)
+p = np.sqrt((n1*k0)**2-beta**2) 
+q = np.emath.sqrt((n2*k0)**2 - beta**2)
+pa = p*a
+qa = (V**2-pa**2)**0.5
+
+#%%
+for i in range(0, 6):
+    plotmode(i, True)
+    plotmode(i, False)
+#%%
+for i in range(0, 6):
+    plotmode(i, True, False)
+    plotmode(i, False, False)
+    
+#%%
+J0 = scipy.special.jv(0, pa)
+J1 = scipy.special.jv(1, pa)
+
+
+K0 = scipy.special.kv(0, pa)
+K1 = scipy.special.kv(1, qa)
+
+Jneg = scipy.special.jv(-1, pa)
+Kneg = scipy.special.jv(-1, qa)
+
+plt.plot(pa, J1/(pa*J0), c='black')
+plt.plot(pa, -K1/(qa*K0), c='red')
+plt.vlines(V, -3.5, 3.5, linestyles='dashed', color='black')
+plt.xlabel('pa')
+plt.xlim(0, V+1.5)
+plt.ylim(-3.5, 3.5)
+plt.show()
+
+plt.plot(pa, Jneg/(pa*J0), c='black')
+plt.plot(pa, Kneg/(qa*K0), c='red')
+
+plt.xlabel('pa')
+plt.vlines(V, -3.5, 3.5, linestyles='dashed', color='black')
+plt.xlim(0, V+1.5)
+plt.ylim(-3.5, 3.5)
+plt.show()
