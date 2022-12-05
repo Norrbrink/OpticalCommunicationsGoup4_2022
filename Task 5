@@ -1,0 +1,37 @@
+import numpy as np
+import scipy.special
+import matplotlib.pyplot as plt
+
+#%% Initial Parameters
+n1 = 1.48
+n2 = 1.47
+a = 3.5e-6
+wavelength = 630e-9
+k0 = 2*np.pi/wavelength
+V = a* k0 * np.sqrt(n1**2 - n2**2)
+
+rtoa = np.linspace(0, a, 1000)
+raftera = np.linspace(0, a, 1000)
+phi = np.linspace(0, 2*np.pi, 100)
+RTOA, PHI = np.meshgrid(rtoa, phi)
+RGTA, PHI1 = np.meshgrid(raftera, phi)
+A = 1
+m = 1
+j = 2
+p = np.sqrt((n1*k0)**2-beta**2) 
+q = np.emath.sqrt((n2*k0)**2 - beta**2)
+beta = 14701123.9
+neff = 1.474046618
+mu0 = 4e-7*np.pi
+omega = 3e8*2*np.pi/wavelength
+e0 = 8.85e-12
+kz = 2*np.pi/wavelength
+JM = scipy.special.jv(m, p*a)
+KM = scipy.special.kv(m, q*a)
+JMprime = scipy.special.jv(m+1, p*a)
+KMprime = scipy.special.kv(m+1, q*a)
+mat = [[JM, 0, -KM, 0], [0, JM, 0,  -KM], [1j*m*beta/(a*p**2)*JM, -mu0*omega/p*JMprime, 1j*m*kz/(a*q**2)*KM, -mu0*omega/q*KMprime], [e0*n1**2*omega/p*JMprime, 1j*m*beta/(a*p**2)*JM, e0*n2**2*omega/q*KMprime, -1j*m*beta/(a*q**2)*KM]]
+C = A*(JM/KM)
+twoDmat = [[-mu0*omega/p*JMprime, -mu0*omega/q*KMprime], [1j*m*beta/(a*p**2)*JM, -1j*m*beta/(a*q**2)*KM]]
+B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*kz/(a*q**2)*KM, A*e0*n1**2*omega/p*JMprime + C*e0*n2**2*omega/q*KMprime])
+vector = [A, B, C, D]
