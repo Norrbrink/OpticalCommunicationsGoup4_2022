@@ -1,0 +1,32 @@
+#%%
+import scipy as sp
+import numpy as np
+from scipy.misc import derivative
+
+wavelength=np.array(630e-9)
+c=3e8 
+neff=1.474046618
+wavelength_array=np.array((620e-9, 625e-9, 630e-9, 635e-9, 640e-9))
+#%%
+def n_eff(x):
+    xn=np.array(x)
+    beta=14701123.9
+    return (beta*xn)/(2*np.pi)
+
+#%%
+d = derivative(n_eff, wavelength_array, dx=1e-3, n=2)
+
+print(d)
+
+#%%
+def D_w(l, two_dev):
+    #wavelength in nm
+    d=(-l/c)*two_dev
+    #
+    return d
+
+#%%
+Waveguide_dispersion=D_w(wavelength_array, d)*(10**(21))
+
+print(Waveguide_dispersion)
+#Note waveguide dispersion is in ps/(nm km)
