@@ -20,8 +20,8 @@ neff = 1.474046618
 
 
 rtoa = np.linspace(0, a, 1000) # Array of radii for plotting values r<a
-raftera = np.linspace(a, 3*a, 2000) # Array of radii for plotting values r>a
-phi = np.linspace(0, 2*np.pi, 100)  # Array of angles between 0 and 2pi
+raftera = np.linspace(a, 3*a, 1000) # Array of radii for plotting values r>a
+phi = np.linspace(0, 2*np.pi, 1000)  # Array of angles between 0 and 2pi
 RTOA, PHI = np.meshgrid(rtoa, phi) #Meshgrid for 3D plotting
 RGTA, PHI1 = np.meshgrid(raftera, phi) #Meshgrid for 3D plotting
 
