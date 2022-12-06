@@ -1,3 +1,14 @@
+'''
+I think that there might be a better way to do this numerically, by using the fraction of 
+energy in the core and cladding. Basically (from L6 notes): 
+n_m**2=energy_frac_core*n1**2 + energy_frac_cladding*n2**2
+
+So we might be able to find a proper function n_m(lambda) and then use that to find the
+derivative here... 
+But this is more of a guess than anything so might see/go ask Dunsby at office hour
+
+'''
+
 
 import scipy as sp
 import numpy as np
