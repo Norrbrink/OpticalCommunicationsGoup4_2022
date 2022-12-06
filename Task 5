@@ -1,7 +1,8 @@
+#%%
 import numpy as np
 import scipy.special
 import matplotlib.pyplot as plt
-
+#%%
 #%% Initial Parameters
 n1 = 1.48
 n2 = 1.47
@@ -35,3 +36,25 @@ C = A*(JM/KM)
 twoDmat = [[-mu0*omega/p*JMprime, -mu0*omega/q*KMprime], [1j*m*beta/(a*p**2)*JM, -1j*m*beta/(a*q**2)*KM]]
 B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*kz/(a*q**2)*KM, A*e0*n1**2*omega/p*JMprime + C*e0*n2**2*omega/q*KMprime])
 vector = [A, B, C, D]
+
+E = [[A*scipy.special.jv(m, p*RTOA)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*RGTA)*np.exp(1j*m*PHI1)], \
+     [(-1j/p**2)*np.exp(1j*m*PHI)*(beta*p*A*scipy.special.jv(m+1, p*RTOA) + 1j*mu0*omega/RTOA*m*B*scipy.special.jv(m, p*RTOA)), \
+      (-1j/q**2)*np.exp(1j*m*PHI)*(beta*q*C*scipy.special.kv(m+1, q*RGTA) + 1j*mu0*omega/RGTA*m*D*scipy.special.kv(m, q*RGTA))], \
+     [(-1j/p**2)*np.exp(1j*m*PHI)*(1j*beta*m*A/RTOA*scipy.special.jv(m, p*RTOA) + mu0*omega*p*B*scipy.special.jv(m+1, p*RTOA)), \
+      (-1j/q**2)*np.exp(1j*m*PHI)*(1j*beta*m/RTOA*C*scipy.special.kv(m, q*RGTA) + mu0*omega*q*D*scipy.special.kv(m+1, q*RGTA))]]
+titles = ['Electric Field Projection in z', 'Electric Field Projection in r', 'Electric Field Projection in Phi']
+
+def plot_3D(E, title):
+    Ertoa, Erlta = E
+    ax = plt.axes(projection='3d')
+    ax.set_title(title)
+    ax.contour3D(RTOA*np.cos(PHI), RTOA*np.sin(PHI), Ertoa, cmap='binary')
+    ax.contour3D(RTOA*np.cos(PHI), RTOA*np.sin(PHI), Erlta, cmap='binary')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel(r'Elctric Field Strength $V m^{-1}$')
+    ax.view_init(30, 30)
+    plt.show()
+
+for i in range(len(E)):
+    plot_3D(E[i], titles[i])
