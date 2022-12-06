@@ -1,8 +1,8 @@
-#%%
+#%% importing packages
 import numpy as np
 import scipy.special
 import matplotlib.pyplot as plt
-#%%
+
 #%% Initial Parameters
 n1 = 1.48
 n2 = 1.47
@@ -10,33 +10,42 @@ a = 3.5e-6
 wavelength = 630e-9
 k0 = 2*np.pi/wavelength
 V = a* k0 * np.sqrt(n1**2 - n2**2)
-
-rtoa = np.linspace(0, a, 1000)
-raftera = np.linspace(0, a, 1000)
-phi = np.linspace(0, 2*np.pi, 100)
-RTOA, PHI = np.meshgrid(rtoa, phi)
-RGTA, PHI1 = np.meshgrid(raftera, phi)
-A = 1
-m = 1
-j = 2
-p = np.sqrt((n1*k0)**2-beta**2) 
-q = np.emath.sqrt((n2*k0)**2 - beta**2)
-beta = 14701123.9
-neff = 1.474046618
 mu0 = 4e-7*np.pi
 omega = 3e8*2*np.pi/wavelength
 e0 = 8.85e-12
-kz = 2*np.pi/wavelength
+beta = 14701123.9
+p = np.sqrt((n1*k0)**2-beta**2) 
+q = np.emath.sqrt((n2*k0)**2 - beta**2)
+neff = 1.474046618
+
+
+rtoa = np.linspace(0, a, 1000) # Array of radii for plotting values r<a
+raftera = np.linspace(a, 3*a, 2000) # Array of radii for plotting values r>a
+phi = np.linspace(0, 2*np.pi, 100)  # Array of angles between 0 and 2pi
+RTOA, PHI = np.meshgrid(rtoa, phi) #Meshgrid for 3D plotting
+RGTA, PHI1 = np.meshgrid(raftera, phi) #Meshgrid for 3D plotting
+
+
+
+m = 1 #mode
+j = 2 
+
+#defining functions to reduce space
 JM = scipy.special.jv(m, p*a)
 KM = scipy.special.kv(m, q*a)
 JMprime = scipy.special.jv(m+1, p*a)
 KMprime = scipy.special.kv(m+1, q*a)
-mat = [[JM, 0, -KM, 0], [0, JM, 0,  -KM], [1j*m*beta/(a*p**2)*JM, -mu0*omega/p*JMprime, 1j*m*kz/(a*q**2)*KM, -mu0*omega/q*KMprime], [e0*n1**2*omega/p*JMprime, 1j*m*beta/(a*p**2)*JM, e0*n2**2*omega/q*KMprime, -1j*m*beta/(a*q**2)*KM]]
+
+#matrix to be solved to determine the A, B, C, D vector
+mat = [[JM, 0, -KM, 0], [0, JM, 0,  -KM], [1j*m*beta/(a*p**2)*JM, -mu0*omega/p*JMprime, 1j*m*k0/(a*q**2)*KM, -mu0*omega/q*KMprime], [e0*n1**2*omega/p*JMprime, 1j*m*beta/(a*p**2)*JM, e0*n2**2*omega/q*KMprime, -1j*m*beta/(a*q**2)*KM]]
+
+A = 1 #Setting A = 1, to determine B, C and D
 C = A*(JM/KM)
 twoDmat = [[-mu0*omega/p*JMprime, -mu0*omega/q*KMprime], [1j*m*beta/(a*p**2)*JM, -1j*m*beta/(a*q**2)*KM]]
 B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*kz/(a*q**2)*KM, A*e0*n1**2*omega/p*JMprime + C*e0*n2**2*omega/q*KMprime])
 vector = [A, B, C, D]
 
+#Defining Electric Field Strength of the projections
 E = [[A*scipy.special.jv(m, p*RTOA)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*RGTA)*np.exp(1j*m*PHI1)], \
      [(-1j/p**2)*np.exp(1j*m*PHI)*(beta*p*A*scipy.special.jv(m+1, p*RTOA) + 1j*mu0*omega/RTOA*m*B*scipy.special.jv(m, p*RTOA)), \
       (-1j/q**2)*np.exp(1j*m*PHI)*(beta*q*C*scipy.special.kv(m+1, q*RGTA) + 1j*mu0*omega/RGTA*m*D*scipy.special.kv(m, q*RGTA))], \
@@ -44,7 +53,7 @@ E = [[A*scipy.special.jv(m, p*RTOA)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*RG
       (-1j/q**2)*np.exp(1j*m*PHI)*(1j*beta*m/RTOA*C*scipy.special.kv(m, q*RGTA) + mu0*omega*q*D*scipy.special.kv(m+1, q*RGTA))]]
 titles = ['Electric Field Projection in z', 'Electric Field Projection in r', 'Electric Field Projection in Phi']
 
-def plot_3D(E, title):
+def plot_3D(E, title): #plotting function
     Ertoa, Erlta = E
     ax = plt.axes(projection='3d')
     ax.set_title(title)
