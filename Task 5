@@ -42,7 +42,7 @@ mat = [[JM, 0, -KM, 0], [0, JM, 0,  -KM], [1j*m*beta/(a*p**2)*JM, -mu0*omega/p*J
 A = 1 #Setting A = 1, to determine B, C and D
 C = A*(JM/KM)
 twoDmat = [[-mu0*omega/p*JMprime, -mu0*omega/q*KMprime], [1j*m*beta/(a*p**2)*JM, -1j*m*beta/(a*q**2)*KM]]
-B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*kz/(a*q**2)*KM, A*e0*n1**2*omega/p*JMprime + C*e0*n2**2*omega/q*KMprime])
+B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*k0/(a*q**2)*KM, A*e0*n1**2*omega/p*JMprime + C*e0*n2**2*omega/q*KMprime])
 vector = [A, B, C, D]
 
 #Defining Electric Field Strength of the projections
