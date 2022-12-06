@@ -7,3 +7,6 @@ Sophie_graphical1 allows the precise roots, beta and propagation constant for ea
 
 Also here is the google doc
 https://docs.google.com/document/d/1mCuwAuDmk6CQ9uB7IfQdHnv9T-qE6L-fwsTzDCJwqWQ/edit?usp=sharing
+
+USE
+jvp(v, z[, n]) to Compute derivatives of Bessel functions of the first kind.
