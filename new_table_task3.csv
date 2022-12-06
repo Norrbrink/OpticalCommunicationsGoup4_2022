@@ -1,0 +1,15 @@
+﻿Mode,m,j,sign,Initial guess
+TE,0,1,pmp,3.3
+TE,0,2,pmp,5.7
+HE,1,1,mpm,2.1
+HE,1,2,mpm,4.6
+HE,2,1,mpm,3.2
+HE,2,2,mpm,5.7
+HE,3,1,mpm,4.4
+HE,4,1,mpm,5.3
+TM,0,1,pmp,3.3
+TM,0,2,pmp,5.7
+EH,1,1,pmp,4.3
+EH,2,1,pmp,5.3
+EH,3,0,pmp,0
+EH,4,0,pmp,0
