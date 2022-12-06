@@ -55,15 +55,14 @@ pa = p*a
 qa = (V**2-pa**2)**0.5
 
 #%%
-#This is old, delete?
 for i in range(0, 6):
-    plotmode(i, True)
-    plotmode(i, False)
+    plotmode(i, True) #TE pmp route
+    plotmode(i, False) #TE mpm route
 #%%
 #This is for ALL modes
 for i in range(0, 6):
-    plotmode(i, True, False) #TE,EH,HE
-    plotmode(i, False, False) #TM
+    plotmode(i, True, False) #TM, EH, pmp
+    plotmode(i, False, False) #TM, EH, mpm
     
 #%%
 'This function is so that we can find the PRECISE roots' 
@@ -71,7 +70,7 @@ for i in range(0, 6):
 'Note TE True models for when TE dominates so TE and HE'
 'Note TE False models for when TM dominates so TM and EH'
 
-table_task3 = pd.read_csv('table_task3.csv')
+table_task3 = pd.read_csv('new_table_task3.csv')
 modes_type = table_task3.loc[:,"Mode"]
 
 pa_results = []
@@ -92,7 +91,6 @@ for i in range(len(modes_type)):
          mode_type  = table_task3.loc[:, "Mode"][i]
          
          def roots_checkdef(pa):
-             #THIS DOESNT REALLY MAKE SENSE SINCE WE ARE OPTIMISING pa, flawed that qa relies on pa..
             qa = (V**2-pa**2)**0.5
             Jm = scipy.special.jv(m, pa)
             Km = scipy.special.kv(m, qa)
@@ -107,7 +105,6 @@ for i in range(len(modes_type)):
                 Ktop = scipy.special.kv(m-1, qa)
                 LHS = Jtop/(pa*Jm)
                 RHS = Ktop/(qa*Km)
-                # DIFFERENT TYPES OF MODE
             
             if mode_type == 'TM' or 'EH':
                 LHS = (n2**2/n1**2)*LHS #TO ACCOUNT FOR TM modes
@@ -155,7 +152,7 @@ table_task3.insert(6, 'Beta', beta)
 table_task3.insert(7, 'Propagation Constant', prop_constant)
  
 
-table_task3.to_csv('Final_table_Task3.csv')
+table_task3.to_csv('Final_table_Task3_new.csv')
 
 
 
