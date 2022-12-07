@@ -16,7 +16,9 @@ e0 = 8.85e-12
 beta = 14701123.9
 p = np.sqrt((n1*k0)**2-beta**2) 
 q = np.emath.sqrt((n2*k0)**2 - beta**2)
-neff = 1.474046618
+#dont back q being imaginary
+#maybe try q = ((V**2-pa**2)**0.5)/a 
+neff =  beta/k0
 
 
 rtoa = np.linspace(0, a, 1000) # Array of radii for plotting values r<a
