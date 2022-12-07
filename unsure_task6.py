@@ -102,19 +102,21 @@ def plot_3D(E, title): #plotting function
 for i in range(3):
     plot_3D(E[i], titles[i])
     plt.show()
-    
-    
+
 #%%
-'not convinced about this' 
  
 def plot_2D(E, title): #plotting function in 2D 
     ER_CORE, E_CLAD = E
-    ax = plt.axes()
+    # plt.fig = (1)
+    fig = plt.figure(figsize=(6,5))
+    left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
+    ax = fig.add_axes([left, bottom, width, height]) 
     ax.set_title(title)
-    ax.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE)
-    ax.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD)
+    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE)
+    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
+    plt.colorbar(plot_task5)
     plt.show()
 
 for i in range(4):
@@ -133,27 +135,32 @@ for i in range(4):
 # inten_cladding = np.sqrt(r_core*np.cos(phi)**2 + r_clad*np.sin(phi)**2)
 
 
+    
 
 def plot_intensity(E, title): #plotting function in 2D 
-    E_z = E[0]
     E_r = E[1]
     E_phi = E[2]
-    
-    inten_core = np.sqrt((E_r[0])**2 + E_phi[0]**2)
-    inten_cladding = np.sqrt((E_r[1])**2 + E_phi[1]**2)
-    
-    ax = plt.axes()
+    inten_core = (E_r[0])**2 + (E_phi[0])**2
+    inten_cladding = (E_r[1])**2 + (E_phi[1])**2
+    fig = plt.figure(figsize=(6,5))
+    left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
+    ax = fig.add_axes([left, bottom, width, height]) 
     ax.set_title(title)
+    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), inten_core)
+    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), inten_cladding)
+    
     ax.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), inten_core)
     ax.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), inten_cladding)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
+    
+    plt.colorbar(plot_task5)
     plt.show()
 
 
-plot_2D(E, 'Total Intensity')
+plot_intensity(E, 'Total Intensity')
 plt.show()
-    
+
 
 
 """
