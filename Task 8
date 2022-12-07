@@ -20,9 +20,9 @@ def n_eff_approx(n1, n2, energy_frac_core):
     return neff
 
 ############################## TASK 8 #######################
-import numpy as np
+
 import scipy.special
-import matplotlib.pyplot as plt
+
 
 n1 = 1.48
 n2 = 1.47
