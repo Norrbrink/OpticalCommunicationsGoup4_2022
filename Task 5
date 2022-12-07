@@ -12,6 +12,7 @@ k0 = 2*np.pi/wavelength
 V = a* k0 * np.sqrt(n1**2 - n2**2)
 mu0 = 4e-7*np.pi
 omega = 3e8*2*np.pi/wavelength
+#omega = np.sqrt((k0**2/e0*u0)) #DIFFERENT OMEGAS NOT SURE WHY
 e0 = 8.85e-12
 beta = 14701123.9
 p = np.sqrt((n1*k0)**2-beta**2) 
