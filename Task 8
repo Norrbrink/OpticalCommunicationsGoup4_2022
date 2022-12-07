@@ -10,7 +10,7 @@ n2=1.47
 frac_core=int(over core) |E|^2 dA/ int((A-> infty)) |E|^2 dA
 frac_cladding=int(over cladding) |E|^2 dA/ int((A-> infty)) |E|^2 dA
 
-Note: ill probably use scipy.integrate.quad if proper function (but unlikely, will probably get an 
+Note: will probably use scipy.integrate.quad if proper function (but unlikely, will probably get an 
 array) or scipy.integratre.romb to find energy_frac_core. Waiting on task 6 results.
 '''
 
