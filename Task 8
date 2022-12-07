@@ -19,4 +19,62 @@ def n_eff_approx(n1, n2, energy_frac_core):
     neff=np.sqrt(n1**2*energy_frac_core + n2**2*(1-energy_frac_core))
     return neff
 
+############################## TASK 8 #######################
+import numpy as np
+import scipy.special
+import matplotlib.pyplot as plt
 
+n1 = 1.48
+n2 = 1.47
+a = 3.5e-6
+wavelength = 630e-9
+k0 = 2*np.pi/wavelength
+V = a* k0 * np.sqrt(n1**2 - n2**2)
+mu0 = 4e-7*np.pi
+omega = 3e8*2*np.pi/wavelength
+#omega = np.sqrt((k0**2/e0*u0)) #DIFFERENT OMEGAS NOT SURE WHY
+e0 = 8.85e-12
+beta = 14701123.9
+p = np.sqrt((n1*k0)**2-beta**2) 
+q = np.emath.sqrt((n2*k0)**2 - beta**2)
+#dont back q being imaginary
+#maybe try q = ((V**2-pa**2)**0.5)/a 
+neff =  beta/k0
+
+m = 1 #mode
+
+JM = scipy.special.jv(m, p*a)
+KM = scipy.special.kv(m, q*a)
+JMprime = scipy.special.jv(m+1, p*a)
+KMprime = scipy.special.kv(m+1, q*a)
+
+A = 1 #Setting A = 1, to determine B, C and D
+C = A*(JM/KM)
+twoDmat = [[-mu0*omega/p*JMprime, -mu0*omega/q*KMprime], [1j*m*beta/(a*p**2)*JM, -1j*m*beta/(a*q**2)*KM]]
+B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*k0/(a*q**2)*KM, A*e0*n1**2*omega/p*JMprime + C*e0*n2**2*omega/q*KMprime])
+
+def I_inf_a(r):
+    Er = (-1j*beta/p**2) * ( (1j*m*p*A*scipy.special.jvp(m,p*r,1)) + (1j*omega*mu0*B*scipy.special.jv(m,p*r))/beta*r )
+    Ephi = (-1j*beta/p**2) * ( (1j*m*A*scipy.special.jv(m,p*r)/r) - (omega*mu0*p*B*scipy.special.jvp(m,p*r,1)/beta) )
+    Einfa = Er + Ephi
+    I = r*abs(Einfa)**2
+    return I
+
+def I_sup_a(r):
+    Er = (1j*beta/q**2) * ( C*q*scipy.special.kvp(m,q*r,1) + (1j*omega*mu0*m*D*scipy.special.kv(m,q*r))/(beta*r) )
+    Ephi = (1j*beta/q**2) * ( 1j*m*C*scipy.special.kv(m,q*r)/r - omega*mu0*q*D*scipy.special.kvp(m,q*r,1)/beta )
+    Esupa = Er + Ephi
+    I = r*abs(Esupa)**2
+    return I
+
+frac_core = scipy.integrate.quad(I_inf_a,0,a*1000)
+frac_cladding = scipy.integrate.quad(I_sup_a,a,a*1000)
+
+'''
+Output of scipy.integrate.quad is (result,error)
+In an ideal world, frac_core[0]+frac_cladding[0] = total (which should be the integral of what you calculated task 6)
+and then Gamma_core = frac_core/total and Gamma_cladding = 1 - Gamma_core
+
+Gamma_core=0.57 Gamma_cladding=0.43 but seems false to me
+
+'''
