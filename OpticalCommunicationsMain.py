@@ -311,22 +311,20 @@ q = np.emath.sqrt((n2*k0)**2 - beta**2)
 neff =  beta/k0
 m = 1 
 
-def I_inf_a(r): 
-    Er = (-1j*beta/p**2) * ( (1j*m*p*A*scipy.special.jvp(m,p*r,1)) + (1j*omega*mu0*B*scipy.special.jv(m,p*r))/beta*r )
+def I_inf_a(r): #Er and Ephi for r<a
+    Er = (-1j*beta/p**2) * ( (1j*m*p*A*scipy.special.jvp(m,p*r,1)) + (1j*omega*mu0*B*scipy.special.jv(m,p*r))/(beta*r) )
     Ephi = (-1j*beta/p**2) * ( (1j*m*A*scipy.special.jv(m,p*r)/r) - (omega*mu0*p*B*scipy.special.jvp(m,p*r,1)/beta) )
-    Einfa = Er + Ephi
-    I = abs(Einfa)**2
+    I = abs(Er)**2 + abs(Ephi)**2
     return I
 
-def I_sup_a(r):
+def I_sup_a(r): #Er and Ephi for r>a
     Er = (1j*beta/q**2) * ( C*q*scipy.special.kvp(m,q*r,1) + (1j*omega*mu0*m*D*scipy.special.kv(m,q*r))/(beta*r) )
     Ephi = (1j*beta/q**2) * ( 1j*m*C*scipy.special.kv(m,q*r)/r - omega*mu0*q*D*scipy.special.kvp(m,q*r,1)/beta )
-    Esupa = Er + Ephi
-    I = abs(Esupa)**2
+    I = abs(Er)**2 + abs(Ephi)**2
     return I
 
 r1 = np.linspace(0,a,1000)
-r2 = np.linspace(a,100*a,1000)
+r2 = np.linspace(a,10*a,1000)
 
 plt.plot(r1, I_inf_a(r1), color='r')
 plt.plot(r2, I_sup_a(r2), color='b')
@@ -338,7 +336,7 @@ def inte_sup(r):
     return r*I_sup_a(r)
 
 frac_core = scipy.integrate.quad(inte_inf,0,a)
-frac_cladding = scipy.integrate.quad(inte_sup,a,a*100)
+frac_cladding = scipy.integrate.quad(inte_sup,a,a*10)
 
 '''
 Output of scipy.integrate.quad is (result,error)
