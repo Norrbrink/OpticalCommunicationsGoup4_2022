@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from scipy import optimize
 import pandas as pd
 from scipy.misc import derivative
+import scipy.integrate
 
 #%% 
 # Initial Parameters
@@ -251,7 +252,7 @@ def plot_2D(E, title): #plotting function in 2D
     plt.colorbar(plot_task5)
     plt.show()
 
-for i in range(4):
+for i in range(len(E)):
     plot_2D(E[i], titles[i])
     plt.show()
 
