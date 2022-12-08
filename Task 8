@@ -53,43 +53,42 @@ C = A*(JM/KM)
 twoDmat = [[-mu0*omega/p*JMprime, -mu0*omega/q*KMprime], [1j*m*beta/(a*p**2)*JM, -1j*m*beta/(a*q**2)*KM]]
 B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*k0/(a*q**2)*KM, A*e0*n1**2*omega/p*JMprime + C*e0*n2**2*omega/q*KMprime])
 
-def I_inf_a(r):
-    Er = (-1j*beta/p**2) * ( (1j*m*p*A*scipy.special.jvp(m,p*r,1)) + (1j*omega*mu0*B*scipy.special.jv(m,p*r))/beta*r )
+def I_inf_a(r): #Er and Ephi for r<a
+    Er = (-1j*beta/p**2) * ( (1j*m*p*A*scipy.special.jvp(m,p*r,1)) + (1j*omega*mu0*B*scipy.special.jv(m,p*r))/(beta*r) )
     Ephi = (-1j*beta/p**2) * ( (1j*m*A*scipy.special.jv(m,p*r)/r) - (omega*mu0*p*B*scipy.special.jvp(m,p*r,1)/beta) )
-    Einfa = Er + Ephi
-    I = abs(Einfa)**2
+    I = abs(Er)**2 + abs(Ephi)**2
     return I
 
-def I_sup_a(r):
+def I_sup_a(r): #Er and Ephi for r>a
     Er = (1j*beta/q**2) * ( C*q*scipy.special.kvp(m,q*r,1) + (1j*omega*mu0*m*D*scipy.special.kv(m,q*r))/(beta*r) )
     Ephi = (1j*beta/q**2) * ( 1j*m*C*scipy.special.kv(m,q*r)/r - omega*mu0*q*D*scipy.special.kvp(m,q*r,1)/beta )
-    Esupa = Er + Ephi
-    I = abs(Esupa)**2
+    I = abs(Er)**2 + abs(Ephi)**2
     return I
 
 
-
+#Plotting the sum of the square modulus
 r1 = np.linspace(0,a,1000)
-r2 = np.linspace(a,100*a,1000)
-
+r2 = np.linspace(a,10*a,1000)
 plt.plot(r1, I_inf_a(r1), color='r')
 plt.plot(r2, I_sup_a(r2), color='b')
 plt.show()
 
-def inte_inf(r):
+
+def inte_inf(r): #Integrande for the core
     return r*I_inf_a(r)
-def inte_sup(r):
+def inte_sup(r): #Integrande for the cladding
     return r*I_sup_a(r)
 
+#Integration
 frac_core = scipy.integrate.quad(inte_inf,0,a)
-frac_cladding = scipy.integrate.quad(inte_sup,a,a*1000)
-
+frac_cladding = scipy.integrate.quad(inte_sup,a,a*10)
 
 '''
 Output of scipy.integrate.quad is (result,error)
 In an ideal world, frac_core[0]+frac_cladding[0] = total (which should be the integral of what you calculated task 6)
 and then Gamma_core = frac_core/total and Gamma_cladding = 1 - Gamma_core
 
-Gamma_core=0.57 Gamma_cladding=0.43 but seems false to me
+frac_core = 0.22
+frac_cladding = 078
 
 '''
