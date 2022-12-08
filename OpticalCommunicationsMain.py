@@ -202,7 +202,7 @@ C = A*(JM/KM)
 twoDmat = [[-mu0*omega/p*JMprime, -mu0*omega/q*KMprime], [1j*m*beta/(a*p**2)*JM, -1j*m*beta/(a*q**2)*KM]]
 B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*k0/(a*q**2)*KM, A*e0*n1**2*omega/p*JMprime + C*e0*n2**2*omega/q*KMprime])
 vector = [A, B, C, D]
-
+#%%
 #Defining Electric Field Strength of the projections
 'E = Field in z, field in r core, field in r cladding, field in phi core, field in phi cladding'
 E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*R_CLAD)*np.exp(1j*m*PHI_CLAD)],  #field in Z 
@@ -301,12 +301,6 @@ print('Waveguide Dispersion:', Waveguide_dispersion, 'ps/(nm km)')
 #Note waveguide dispersion is in ps/(nm km)
 
 #%% TASK 8
-beta = 14731224.64
-p = np.sqrt((n1*k0)**2-beta**2) 
-q = np.emath.sqrt((n2*k0)**2 - beta**2)
-#q = ((V**2-pa**2)**0.5)/a 
-neff =  beta/k0
-m = 1 
 
 def I_inf_a(r): #Er and Ephi for r<a
     Er = (-1j*beta/p**2) * ( (1j*m*p*A*scipy.special.jvp(m,p*r,1)) + (1j*omega*mu0*B*scipy.special.jv(m,p*r))/(beta*r) )
@@ -320,6 +314,7 @@ def I_sup_a(r): #Er and Ephi for r>a
     I = abs(Er)**2 + abs(Ephi)**2
     return I
 
+
 #Plotting the sum of the square modulus
 r1 = np.linspace(0,a,1000)
 r2 = np.linspace(a,10*a,1000)
@@ -327,14 +322,17 @@ plt.plot(r1, I_inf_a(r1), color='r')
 plt.plot(r2, I_sup_a(r2), color='b')
 plt.show()
 
-def inte_inf(r):
+
+def inte_inf(r): #Integrande for the core
     return r*I_inf_a(r)
-def inte_sup(r):
+def inte_sup(r): #Integrande for the cladding
     return r*I_sup_a(r)
 
-#Integrating
-frac_core = scipy.integrate.quad(inte_inf,0,a)
-frac_cladding = scipy.integrate.quad(inte_sup,a,a*10)
+#Integration
+intensitytot_core = scipy.integrate.quad(inte_inf,0,a)
+intensitytot_cladding= scipy.integrate.quad(inte_sup,a,a*10)
+frac_core = intensitytot_core[0]/(intensitytot_core[0] + intensitytot_cladding[0])
+frac_cladding = intensitytot_cladding[0]/(intensitytot_core[0] + intensitytot_cladding[0]) 
 
 '''
 Output of scipy.integrate.quad is (result,error)
