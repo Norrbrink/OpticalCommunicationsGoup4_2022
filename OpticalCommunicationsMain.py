@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov 23 14:05:32 2022
-
-@author: Alexander, Sophie
+Main Code File that produces all the results of our Project
 """
 #%% Importing packages
 import numpy as np
