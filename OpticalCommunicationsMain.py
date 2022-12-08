@@ -323,9 +323,9 @@ def I_sup_a(r): #Er and Ephi for r>a
     I = abs(Er)**2 + abs(Ephi)**2
     return I
 
+#Plotting the sum of the square modulus
 r1 = np.linspace(0,a,1000)
 r2 = np.linspace(a,10*a,1000)
-
 plt.plot(r1, I_inf_a(r1), color='r')
 plt.plot(r2, I_sup_a(r2), color='b')
 plt.show()
@@ -335,6 +335,7 @@ def inte_inf(r):
 def inte_sup(r):
     return r*I_sup_a(r)
 
+#Integrating
 frac_core = scipy.integrate.quad(inte_inf,0,a)
 frac_cladding = scipy.integrate.quad(inte_sup,a,a*10)
 
