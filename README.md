@@ -10,3 +10,11 @@ https://docs.google.com/document/d/1mCuwAuDmk6CQ9uB7IfQdHnv9T-qE6L-fwsTzDCJwqWQ/
 
 USE
 jvp(v, z[, n]) to Compute derivatives of Bessel functions of the first kind.
+
+
+READ ME
+Optical Communications contains a file that when run, presents our work for all tasks.
+
+table_task3.csv is a table of the initial guesses of modes from task 3
+
+new_table_task3.csv is a table of the final guesses of the modes determined using a Newton-Raphson roots finder method.
