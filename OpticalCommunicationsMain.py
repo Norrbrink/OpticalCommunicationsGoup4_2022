@@ -341,6 +341,7 @@ Output of scipy.integrate.quad is (result,error)
 In an ideal world, frac_core[0]+frac_cladding[0] = total (which should be the integral of what you calculated task 6)
 and then Gamma_core = frac_core/total and Gamma_cladding = 1 - Gamma_core
 
-Gamma_core=0.57 Gamma_cladding=0.43 but seems false to me
+frac_core = 0.22
+frac_cladding = 078
 
 '''
