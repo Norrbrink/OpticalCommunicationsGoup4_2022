@@ -3,6 +3,8 @@
 Created on Fri Dec  2 15:47:45 2022
 
 @author: sophi
+
+This is code for Tasks 5 and 6 
 """
 
 #importing packages
@@ -19,33 +21,25 @@ k0 = 2*np.pi/wavelength
 V = a* k0 * np.sqrt(n1**2 - n2**2)
 mu0 = 4e-7*np.pi
 e0 = 8.85e-12
+omega = np.sqrt((k0**2/(e0*mu0)))
 
-'why is omega 2 different'
-omega = 3e8*2*np.pi/wavelength
-omega2 = np.sqrt((k0**2/e0*mu0))
+'Chosen mode HE, m=2, j=1'
+m = 2 #mode
+j = 1 
 
-'Chosen mode HE, m=1, j=1'
-beta = 14701123.9
+beta = 14731224.64
 p = np.sqrt((n1*k0)**2-beta**2) 
-# q = np.sqrt(beta**2 - (n2*k0)**2)
+q = np.sqrt(beta**2 - (n2*k0)**2)
 # q = np.emath.sqrt((n2*k0)**2 - beta**2)
 pa = p*a
-qa = (V**2-pa**2)**0.5
-q = qa/a
-'keeping q to be real here'
-
-
 neff = beta/k0
-
 r_core = np.linspace(0, a, 1000) # Array of radii for plotting values r<a
 r_clad = np.linspace(a, 3*a, 1000) # Array of radii for plotting values r>a
 phi = np.linspace(0, 2*np.pi, 1000)  # Array of angles between 0 and 2pi
 
 R_CORE, PHI = np.meshgrid(r_core, phi) #Meshgrid for 3D plotting
-R_CLAD, PHI1 = np.meshgrid(r_clad, phi) #Meshgrid for 3D plotting
+R_CLAD, PHI_CLAD = np.meshgrid(r_clad, phi) #Meshgrid for 3D plotting
 
-m = 1 #mode
-j = 2 
 
 #defining functions to reduce space
 
@@ -67,6 +61,7 @@ B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*k0/(a*q**2)*KM
 vector = [A, B, C, D]
 
 #Defining Electric Field Strength of the projections
+'E = FIELD in Z, field in r core, field in r cladding, field in phi core, field in phi cladding'
 E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*R_CLAD)*np.exp(1j*m*PHI_CLAD)],  #field in Z 
      
      [(-1j/p**2)*np.exp(1j*m*PHI)*(beta*p*A*scipy.special.jvp(m, p*R_CORE) + 1j*mu0*omega/R_CORE*m*B*scipy.special.jv(m, p*R_CORE)),  #field in R core
@@ -80,12 +75,8 @@ E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*
     
 titles = ['Electric Field Projection in z', 'Electric Field Projection in r', 'Electric Field Projection in Phi']
 
-    
-    
-titles = ['Electric Field Projection in z', 'Electric Field Projection in r', 'Electric Field Projection in Phi']
 
-
-
+#%% 
 def plot_3D(E, title): #plotting function
     ER_CORE, E_CLAD = E
  
@@ -102,8 +93,10 @@ def plot_3D(E, title): #plotting function
 for i in range(3):
     plot_3D(E[i], titles[i])
     plt.show()
-
+    
+    
 #%%
+'not convinced about this' 
  
 def plot_2D(E, title): #plotting function in 2D 
     ER_CORE, E_CLAD = E
@@ -125,17 +118,6 @@ for i in range(4):
 
 #%% TASK 6
 'Plot the spatial distriution'
-
-#sum of the square modulus of the field in the {radial, tangential}
-
-# inten_core = np.sqrt(R_CORE*np.cos(PHI)**2 + R_CORE*np.sin(PHI)**2)
-# inten_cladding = np.sqrt(R_CLAD*np.cos(PHI)**2 + R_CLAD*np.sin(PHI)**2)
-
-# inten_core = np.sqrt(r_core*np.cos(phi)**2 + r_core*np.sin(phi)**2)
-# inten_cladding = np.sqrt(r_core*np.cos(phi)**2 + r_clad*np.sin(phi)**2)
-
-
-    
 
 def plot_intensity(E, title): #plotting function in 2D 
     E_r = E[1]
@@ -160,7 +142,7 @@ def plot_intensity(E, title): #plotting function in 2D
 
 plot_intensity(E, 'Total Intensity')
 plt.show()
-
+    
 
 
 """
