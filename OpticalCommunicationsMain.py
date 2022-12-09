@@ -173,6 +173,10 @@ def check_results():
 #%% TASKS 5-6
 'Chosen mode HE, m=1, j=2. Beta value taken from Final_Table'
 beta = 14701123.9
+#Redefine p and q with this specific Beta value
+p = np.sqrt((n1*k0)**2-beta**2) 
+pa = p*a
+q = np.sqrt(beta**2 - (n2*k0)**2)
 neff = beta/k0
 
 r_core = np.linspace(0, a, 1000) # Array of radii for plotting values r<a
