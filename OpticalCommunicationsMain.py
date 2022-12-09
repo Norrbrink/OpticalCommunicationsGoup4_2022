@@ -86,6 +86,32 @@ modes_type = table_task3.loc[:,"Mode"]
 
 pa_results = []
 
+def roots_checkdef(pa):
+    qa = (V**2-pa**2)**0.5
+    Jm = scipy.special.jv(m, pa)
+    Km = scipy.special.kv(m, qa)
+    Jtop =  scipy.special.jvp(m, pa)
+    Ktop = scipy.special.kvp(m, qa)
+
+    if sign == 'pmp': #plus minus plus
+        Jtop =  scipy.special.jv(m+1, pa)
+        Ktop = scipy.special.kv(m+1, qa)
+    # Jtop =  scipy.special.jvp(m, pa)
+    # Ktop = scipy.special.kvp(m, qa)
+        LHS = Jtop/(pa*Jm)
+        RHS = -Ktop/(qa*Km)
+
+    else: #minus plus minus
+        Jtop =  scipy.special.jv(m-1, pa)
+        Ktop = scipy.special.kv(m-1, qa)
+        # Jtop =  scipy.special.jvp(m, pa)
+        # Ktop = scipy.special.kvp(m, qa)
+        LHS = Jtop/(pa*Jm)
+        RHS = Ktop/(qa*Km)
+
+    if mode_type == 'TM' or 'EH':
+        LHS = (n2**2/n1**2)*LHS #TO ACCOUNT FOR TM modes
+        return LHS - RHS
 
 for i in range(len(modes_type)):
     """
@@ -98,34 +124,7 @@ for i in range(len(modes_type)):
          m = table_task3.loc[:, "m"][i]
          sign = table_task3.loc[:, "sign"][i]
          mode_type  = table_task3.loc[:, "Mode"][i]
-         
-         def roots_checkdef(pa):
-            qa = (V**2-pa**2)**0.5
-            Jm = scipy.special.jv(m, pa)
-            Km = scipy.special.kv(m, qa)
-            Jtop =  scipy.special.jvp(m, pa)
-            Ktop = scipy.special.kvp(m, qa)
-            
-            if sign == 'pmp': #plus minus plus
-                Jtop =  scipy.special.jv(m+1, pa)
-                Ktop = scipy.special.kv(m+1, qa)
-            # Jtop =  scipy.special.jvp(m, pa)
-            # Ktop = scipy.special.kvp(m, qa)
-                LHS = Jtop/(pa*Jm)
-                RHS = -Ktop/(qa*Km)
-                
-            else: #minus plus minus
-                Jtop =  scipy.special.jv(m-1, pa)
-                Ktop = scipy.special.kv(m-1, qa)
-                # Jtop =  scipy.special.jvp(m, pa)
-                # Ktop = scipy.special.kvp(m, qa)
-                LHS = Jtop/(pa*Jm)
-                RHS = Ktop/(qa*Km)
-            
-            if mode_type == 'TM' or 'EH':
-                LHS = (n2**2/n1**2)*LHS #TO ACCOUNT FOR TM modes
-                return LHS - RHS
-         
+                  
          output_roots = optimize.newton(roots_checkdef, x0 = initial_guess , fprime=None, 
                            tol=1.38e-6, maxiter=1500, 
                           fprime2=None, x1=None, rtol=0.0, full_output=False,
@@ -247,8 +246,8 @@ def plot_2D(E, title): #plotting function in 2D
     left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
     ax = fig.add_axes([left, bottom, width, height]) 
     ax.set_title(title)
-    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE)
-    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD)
+    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE, cmap= 'bwr')
+    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD, cmap= 'bwr')
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     plt.colorbar(plot_task5)
