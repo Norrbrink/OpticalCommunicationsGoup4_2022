@@ -170,7 +170,7 @@ def check_results():
 
 #%% TASKS 5-6
 'Chosen mode HE, m=1, j=2'
-beta = 14731224.64
+beta = 14701123.9
 p = np.sqrt((n1*k0)**2-beta**2) 
 pa = p*a
 q = np.sqrt(beta**2 - (n2*k0)**2)
