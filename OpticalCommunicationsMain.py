@@ -28,10 +28,12 @@ V = a*k0*np.sqrt(n1**2 - n2**2)
 
 #An array of Beta values so that for plotting graphs to find modes
 beta = np.linspace(n2*k0, n1*k0, 1000)
+
+#Defining p (radial component in core) and q (raidal component in cladding)
 p = np.sqrt((n1*k0)**2-beta**2) 
-q = np.emath.sqrt((n2*k0)**2 - beta**2)
 pa = p*a
-qa = q*a
+q = np.sqrt(beta**2 - (n2*k0)**2)
+qa= q*a
 
 #%% Procuring inital guesses using a graphical method
 def plotmode(m, pmp=True, TE=True):
@@ -169,12 +171,8 @@ def check_results():
             print('Beta values incorrect')
 
 #%% TASKS 5-6
-'Chosen mode HE, m=1, j=2'
+'Chosen mode HE, m=1, j=2. Beta value taken from Final_Table'
 beta = 14701123.9
-p = np.sqrt((n1*k0)**2-beta**2) 
-pa = p*a
-q = np.sqrt(beta**2 - (n2*k0)**2)
-qa= q*a
 neff = beta/k0
 
 r_core = np.linspace(0, a, 1000) # Array of radii for plotting values r<a
