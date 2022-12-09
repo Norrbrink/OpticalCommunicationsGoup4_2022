@@ -62,7 +62,7 @@ vector = [A, B, C, D]
 
 #Defining Electric Field Strength of the projections
 'E = FIELD in Z, field in r core, field in r cladding, field in phi core, field in phi cladding'
-E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*R_CLAD)*np.exp(1j*m*PHI_CLAD)],  #field in Z 
+Old_E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*R_CLAD)*np.exp(1j*m*PHI_CLAD)],  #field in Z 
      
      [(-1j/p**2)*np.exp(1j*m*PHI)*(beta*p*A*scipy.special.jvp(m, p*R_CORE) + 1j*mu0*omega/R_CORE*m*B*scipy.special.jv(m, p*R_CORE)),  #field in R core
       
@@ -72,7 +72,18 @@ E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*
       
       (-1j/q**2)*np.exp(1j*m*PHI)*(1j*beta*m/R_CLAD*C*scipy.special.kv(m, q*R_CLAD) + mu0*omega*q*D*scipy.special.kvp(m, q*R_CLAD))]] #field in Phi cladding
     
-    
+#NEW E
+
+E = [[A*scipy.special.jv(m, p*R_CORE), C*scipy.special.kv(m, p*R_CLAD)],  #field in Z 
+     
+     [(-1j*beta/p**2)*(p*A*scipy.special.jvp(m, p*R_CORE) + (1j*mu0*omega*m/(R_CORE*beta))*B*scipy.special.jv(m, p*R_CORE)),   #field in R core
+      
+      (-1j*beta/q**2)*(q*C*scipy.special.kvp(m, q*R_CLAD) + (1j*mu0*omega*m/(R_CLAD*beta))*D*scipy.special.kv(m, q*R_CLAD))],  #field in R cladding
+         
+     [(-1j*beta/p**2)*((1j*beta*m*A/R_CORE)*scipy.special.jv(m, p*R_CORE) + mu0*omega*p*B*scipy.special.jvp(m, p*R_CORE)), #field in Phi core
+      
+      (-1j*beta/q**2)*(1j*m/R_CLAD*C*scipy.special.kv(m, q*R_CLAD) + mu0*omega*q*D/beta*scipy.special.kvp(m, q*R_CLAD))]] #field in Phi cladding
+
 titles = ['Electric Field Projection in z', 'Electric Field Projection in r', 'Electric Field Projection in Phi']
 
 
