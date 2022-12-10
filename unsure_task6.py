@@ -3,6 +3,8 @@
 Created on Fri Dec  2 15:47:45 2022
 
 @author: sophi
+
+This is code for Tasks 5 and 6 
 """
 
 #importing packages
@@ -19,33 +21,25 @@ k0 = 2*np.pi/wavelength
 V = a* k0 * np.sqrt(n1**2 - n2**2)
 mu0 = 4e-7*np.pi
 e0 = 8.85e-12
+omega = np.sqrt((k0**2/(e0*mu0)))
 
-'why is omega 2 different'
-omega = 3e8*2*np.pi/wavelength
-omega2 = np.sqrt((k0**2/e0*mu0))
+'Chosen mode HE, m=2, j=1'
+m = 2 #mode
+j = 1 
 
-'Chosen mode HE, m=1, j=1'
-beta = 14701123.9
+beta = 14731224.64
 p = np.sqrt((n1*k0)**2-beta**2) 
-# q = np.sqrt(beta**2 - (n2*k0)**2)
+q = np.sqrt(beta**2 - (n2*k0)**2)
 # q = np.emath.sqrt((n2*k0)**2 - beta**2)
 pa = p*a
-qa = (V**2-pa**2)**0.5
-q = qa/a
-'keeping q to be real here'
-
-
 neff = beta/k0
-
 r_core = np.linspace(0, a, 1000) # Array of radii for plotting values r<a
 r_clad = np.linspace(a, 3*a, 1000) # Array of radii for plotting values r>a
 phi = np.linspace(0, 2*np.pi, 1000)  # Array of angles between 0 and 2pi
 
 R_CORE, PHI = np.meshgrid(r_core, phi) #Meshgrid for 3D plotting
-R_CLAD, PHI1 = np.meshgrid(r_clad, phi) #Meshgrid for 3D plotting
+R_CLAD, PHI_CLAD = np.meshgrid(r_clad, phi) #Meshgrid for 3D plotting
 
-m = 1 #mode
-j = 2 
 
 #defining functions to reduce space
 
@@ -67,18 +61,33 @@ B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*k0/(a*q**2)*KM
 vector = [A, B, C, D]
 
 #Defining Electric Field Strength of the projections
-'matrix on page 6'
-E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*R_CLAD)*np.exp(1j*m*PHI1)], \
-     [(-1j/p**2)*np.exp(1j*m*PHI)*(beta*p*A*scipy.special.jv(m+1, p*R_CORE) + 1j*mu0*omega/R_CORE*m*B*scipy.special.jv(m, p*R_CORE)), \
-      (-1j/q**2)*np.exp(1j*m*PHI)*(beta*q*C*scipy.special.kv(m+1, q*R_CLAD) + 1j*mu0*omega/R_CLAD*m*D*scipy.special.kv(m, q*R_CLAD))], \
-     [(-1j/p**2)*np.exp(1j*m*PHI)*(1j*beta*m*A/R_CORE*scipy.special.jv(m, p*R_CORE) + mu0*omega*p*B*scipy.special.jv(m+1, p*R_CORE)), \
-      (-1j/q**2)*np.exp(1j*m*PHI)*(1j*beta*m/R_CORE*C*scipy.special.kv(m, q*R_CLAD) + mu0*omega*q*D*scipy.special.kv(m+1, q*R_CLAD))]]
+'E = FIELD in Z, field in r core, field in r cladding, field in phi core, field in phi cladding'
+Old_E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*R_CLAD)*np.exp(1j*m*PHI_CLAD)],  #field in Z 
+     
+     [(-1j/p**2)*np.exp(1j*m*PHI)*(beta*p*A*scipy.special.jvp(m, p*R_CORE) + 1j*mu0*omega/R_CORE*m*B*scipy.special.jv(m, p*R_CORE)),  #field in R core
+      
+      (-1j/q**2)*np.exp(1j*m*PHI)*(beta*q*C*scipy.special.kvp(m, q*R_CLAD) + 1j*mu0*omega/R_CLAD*m*D*scipy.special.kv(m, q*R_CLAD))],  #field in R cladding
+         
+     [(-1j/p**2)*np.exp(1j*m*PHI)*(1j*beta*m*A/R_CORE*scipy.special.jv(m, p*R_CORE) + mu0*omega*p*B*scipy.special.jvp(m, p*R_CORE)), #field in Phi core
+      
+      (-1j/q**2)*np.exp(1j*m*PHI)*(1j*beta*m/R_CLAD*C*scipy.special.kv(m, q*R_CLAD) + mu0*omega*q*D*scipy.special.kvp(m, q*R_CLAD))]] #field in Phi cladding
     
-    
+#NEW E
+
+E = [[A*scipy.special.jv(m, p*R_CORE), C*scipy.special.kv(m, p*R_CLAD)],  #field in Z 
+     
+     [(-1j*beta/p**2)*(p*A*scipy.special.jvp(m, p*R_CORE) + (1j*mu0*omega*m/(R_CORE*beta))*B*scipy.special.jv(m, p*R_CORE)),   #field in R core
+      
+      (-1j*beta/q**2)*(q*C*scipy.special.kvp(m, q*R_CLAD) + (1j*mu0*omega*m/(R_CLAD*beta))*D*scipy.special.kv(m, q*R_CLAD))],  #field in R cladding
+         
+     [(-1j*beta/p**2)*((1j*beta*m*A/R_CORE)*scipy.special.jv(m, p*R_CORE) + mu0*omega*p*B*scipy.special.jvp(m, p*R_CORE)), #field in Phi core
+      
+      (-1j*beta/q**2)*(1j*m/R_CLAD*C*scipy.special.kv(m, q*R_CLAD) + mu0*omega*q*D/beta*scipy.special.kvp(m, q*R_CLAD))]] #field in Phi cladding
+
 titles = ['Electric Field Projection in z', 'Electric Field Projection in r', 'Electric Field Projection in Phi']
 
 
-
+#%% 
 def plot_3D(E, title): #plotting function
     ER_CORE, E_CLAD = E
  
@@ -102,12 +111,16 @@ for i in range(3):
  
 def plot_2D(E, title): #plotting function in 2D 
     ER_CORE, E_CLAD = E
-    ax = plt.axes()
+    # plt.fig = (1)
+    fig = plt.figure(figsize=(6,5))
+    left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
+    ax = fig.add_axes([left, bottom, width, height]) 
     ax.set_title(title)
-    ax.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE)
-    ax.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD)
+    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE)
+    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
+    plt.colorbar(plot_task5)
     plt.show()
 
 for i in range(4):
@@ -117,34 +130,28 @@ for i in range(4):
 #%% TASK 6
 'Plot the spatial distriution'
 
-#sum of the square modulus of the field in the {radial, tangential}
-
-# inten_core = np.sqrt(R_CORE*np.cos(PHI)**2 + R_CORE*np.sin(PHI)**2)
-# inten_cladding = np.sqrt(R_CLAD*np.cos(PHI)**2 + R_CLAD*np.sin(PHI)**2)
-
-# inten_core = np.sqrt(r_core*np.cos(phi)**2 + r_core*np.sin(phi)**2)
-# inten_cladding = np.sqrt(r_core*np.cos(phi)**2 + r_clad*np.sin(phi)**2)
-
-
-
 def plot_intensity(E, title): #plotting function in 2D 
-    E_z = E[0]
     E_r = E[1]
     E_phi = E[2]
-    
-    inten_core = np.sqrt((E_r[0])**2 + E_phi[0]**2)
-    inten_cladding = np.sqrt((E_r[1])**2 + E_phi[1]**2)
-    
-    ax = plt.axes()
+    inten_core = (E_r[0])**2 + (E_phi[0])**2
+    inten_cladding = (E_r[1])**2 + (E_phi[1])**2
+    fig = plt.figure(figsize=(6,5))
+    left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
+    ax = fig.add_axes([left, bottom, width, height]) 
     ax.set_title(title)
+    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), inten_core)
+    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), inten_cladding)
+    
     ax.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), inten_core)
     ax.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), inten_cladding)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
+    
+    plt.colorbar(plot_task5)
     plt.show()
 
 
-plot_2D(E, 'Total Intensity')
+plot_intensity(E, 'Total Intensity')
 plt.show()
     
 
