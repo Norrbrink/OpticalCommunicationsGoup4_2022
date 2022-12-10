@@ -1,24 +1,13 @@
-'''
-I think that there might be a better way to do this numerically, by using the fraction of 
-energy in the core and cladding. Basically (from L6 notes): 
-n_m**2=energy_frac_core*n1**2 + energy_frac_cladding*n2**2
-
-So we might be able to find a proper function n_m(lambda) and then use that to find the
-derivative here... 
-But this is more of a guess than anything so might see/go ask at office hour
-
-
-'''
-
+#%%
 
 import scipy as sp
 import numpy as np
 from scipy.misc import derivative
 
-wavelength=np.array(630e-9)
+wavelength=np.array(630)
 c=3e8 
 neff=1.474046618
-wavelength_array=np.array((620e-9, 625e-9, 630e-9, 635e-9, 640e-9))
+wavelength_array=np.array((620, 625, 630, 635, 640))
 #%%
 def n_eff(x):
     xn=np.array(x)
@@ -26,19 +15,48 @@ def n_eff(x):
     return (beta*xn)/(2*np.pi)
 
 #%%
-d = derivative(n_eff, wavelength_array, dx=1e-3, n=2)
+d = derivative(n_eff, wavelength, dx=1e-3, n=2)
 
 print(d)
 
 #%%
 def D_w(l, two_dev):
     #wavelength in nm
-    d=(-l/c)*two_dev
+    d=-(l/c)*two_dev
     #
     return d
 
 #%%
-Waveguide_dispersion=D_w(wavelength_array, d)*(10**(21))
+Waveguide_dispersion=D_w(wavelength, d)
 
 print(Waveguide_dispersion)
 #Note waveguide dispersion is in ps/(nm km)
+# %%
+'Alternative method'
+#%%
+
+def D(f, x, h=1.e-9, *params):
+    return (f(x+h, *params)-f(x-h, *params))/(2*h)
+
+def D2(f, x, h=1.e-9, *params):
+    d1=D(f,x,h, *params)
+    return D(d1, x)
+#%%
+dev=D(n_eff, wavelength)
+print(dev)
+
+#%%
+def seconddev(f, x, n, dx, *params):
+    step=f(x[n])-f(x[n-1])
+    minus=(f(x+dx, *params)-f(x-dx, *params))/(2*dx)
+    return ((2*(step)-minus)/(dx*2)).mean()
+#%%
+
+secondddd=seconddev(n_eff, wavelength_array, 3, 0.0001)
+print(secondddd)
+
+#%%
+Waveguide_dispersion=D_w(wavelength, secondddd)/1000
+
+print(Waveguide_dispersion)
+#%%
