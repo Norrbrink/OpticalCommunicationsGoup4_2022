@@ -179,11 +179,53 @@ def plot_intensity(E, title): #plotting function in 2D
 plot_intensity(E, 'Total Intensity')
 plt.show()
 
+'NEW BETA METHOD STARTS HERE'
 
-#%% 
-'grr'
-# E[1] = ER_CORE, E_CLAD 
-# aaa = ER_CORE[0]
-# print('whole thing', aaa)
-# print('this is real', np.real(aaa))
-# print('this is imaginary', np.imag(aaa))
+
+'see equation 3 , page 7 of lecture three notes'
+
+m = 1
+
+def roots_checkdef_new(pa):
+    qa = (V**2-pa**2)**0.5
+    JM = scipy.special.jv(m, pa)
+    KM = scipy.special.kv(m, qa)
+    JM_PRIME =  scipy.special.jvp(m, pa)
+    KM_PRIME = scipy.special.kvp(m, qa)
+    
+    p_precise = pa/a 
+    
+    beta_old = np.sqrt((n1**2)*(k0**2) - p_precise**2)
+    
+    
+    #USING EQUATION TOP OF PAGE 7
+    Ja = JM_PRIME/(pa*JM)
+    Ka = KM_PRIME/(qa*KM)
+    N1_p = ((n1**2+n2**2)/(2*n1**2))
+    
+    N1_m = ((n1**2-n2**2)/(2*n1**2))
+    
+    SNOW = (1/(pa)**2 + 1/(qa)**2)
+    
+    pre = (beta_old**2)*(m**2)/((n1**2)*(k0**2))
+    
+    
+    C1 = ((N1_m)**2)*(Ka)**2 + pre*SNOW**2
+    
+
+    zeros = -Ja - N1_p*Ka - C1
+    return zeros 
+
+ 
+
+output_roots = optimize.newton(roots_checkdef_new, x0 = 4 , fprime=None, 
+                           tol=1.38e-6, maxiter=1500, 
+                          fprime2=None, x1=None, rtol=0.0, full_output=False,
+                 
+                            disp=True)
+
+
+beta_b = np.sqrt((n1**2)*(k0**2) - 4.446909818634911**2)
+print(beta_b)
+   
+
