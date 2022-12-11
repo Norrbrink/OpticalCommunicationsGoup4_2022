@@ -210,11 +210,11 @@ E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*
      
      [(-1j/p**2)*np.exp(1j*m*PHI)*(beta*p*A*scipy.special.jvp(m, p*R_CORE) + 1j*mu0*omega/R_CORE*m*B*scipy.special.jv(m, p*R_CORE)),  #field in R core
       
-      (-1j/q**2)*np.exp(1j*m*PHI_CLAD)*(beta*q*C*scipy.special.kvp(m, q*R_CLAD) + 1j*mu0*omega/R_CLAD*m*D*scipy.special.kv(m, q*R_CLAD))],  #field in R cladding
+      (1j/q**2)*np.exp(1j*m*PHI_CLAD)*(beta*q*C*scipy.special.kvp(m, q*R_CLAD) + 1j*mu0*omega/R_CLAD*m*D*scipy.special.kv(m, q*R_CLAD))],  #field in R cladding
          
      [(-1j/p**2)*np.exp(1j*m*PHI)*(1j*beta*m*A/R_CORE*scipy.special.jv(m, p*R_CORE) + mu0*omega*p*B*scipy.special.jvp(m, p*R_CORE)), #field in Phi core
       
-      (-1j/q**2)*np.exp(1j*m*PHI_CLAD)*(1j*beta*m/R_CLAD*C*scipy.special.kv(m, q*R_CLAD) + mu0*omega*q*D*scipy.special.kvp(m, q*R_CLAD))]] #field in Phi cladding
+      (1j/q**2)*np.exp(1j*m*PHI_CLAD)*(1j*beta*m/R_CLAD*C*scipy.special.kv(m, q*R_CLAD) + mu0*omega*q*D*scipy.special.kvp(m, q*R_CLAD))]] #field in Phi cladding
     
 titles = ['Electric Field Projection in z', 'Electric Field Projection in r', 'Electric Field Projection in Phi']
 
