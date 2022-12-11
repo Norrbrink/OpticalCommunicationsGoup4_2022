@@ -228,8 +228,8 @@ def plot_2D(E, title): #plotting function in 2D
     left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
     ax = fig.add_axes([left, bottom, width, height]) 
     ax.set_title(title)
-    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE, cmap= 'bwr')
-    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD, cmap= 'bwr')
+    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE, cmap= 'bwr', levels = 50)
+    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD, cmap= 'bwr', levels = 50)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     plt.colorbar(plot_task5)
@@ -245,9 +245,6 @@ for i in range(len(E)):
 def plot_intensity(E, title): #plotting function in 2D 
     E_r = E[1]
     E_phi = E[2]
-    #DELETE MAYBE
-    #inten_core = (E_r[0])**2 + (E_phi[0])**2
-    #inten_cladding = (E_r[1])**2 + (E_phi[1])**2
     inten_core = abs(E_r[0])**2 + abs(E_phi[0])**2
     inten_cladding = abs(E_r[1])**2 + abs(E_phi[1])**2
     fig = plt.figure(figsize=(6,5))
