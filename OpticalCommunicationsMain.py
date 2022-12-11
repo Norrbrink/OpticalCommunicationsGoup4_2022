@@ -309,23 +309,24 @@ plt.plot(r2, I_sup_a(r2), color='b')
 plt.show()
 
 
-def inte_inf(r): #Integrande for the core
+def inte_inf(r): #Integrande for the core (the 2*pi is simplified)
     return r*I_inf_a(r)
 def inte_sup(r): #Integrande for the cladding
     return r*I_sup_a(r)
 
 #Integration
-intensitytot_core = scipy.integrate.quad(inte_inf,0,a)
+intensitytot_core = scipy.integrate.quad(inte_inf,0,a) #Output of scipy.integrate.quad is (result,error)
 intensitytot_cladding= scipy.integrate.quad(inte_sup,a,a*10)
 frac_core = intensitytot_core[0]/(intensitytot_core[0] + intensitytot_cladding[0])
-frac_cladding = intensitytot_cladding[0]/(intensitytot_core[0] + intensitytot_cladding[0]) 
+frac_cladding = intensitytot_cladding[0]/(intensitytot_core[0] + intensitytot_cladding[0])
+
+n_eff = np.sqrt(n1**2*frac_core +n2**2*frac_cladding) #Effective index approximation 
 
 '''
-Output of scipy.integrate.quad is (result,error)
-In an ideal world, frac_core[0]+frac_cladding[0] = total (which should be the integral of what you calculated task 6)
-and then Gamma_core = frac_core/total and Gamma_cladding = 1 - Gamma_core
-
+Output :
 frac_core = 0.22
 frac_cladding = 078
 
+n_eff = 1.4722   
+n_eff value different from the other effective index value. Possible reason : Intensity not a gaussian, meaning the formula is not totally correct.
 '''
