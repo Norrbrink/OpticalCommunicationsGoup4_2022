@@ -4,10 +4,10 @@ import scipy as sp
 import numpy as np
 from scipy.misc import derivative
 
-wavelength=np.array(630)
+wavelength=np.array(630e-9)
 c=3e8 
 neff=1.474046618
-wavelength_array=np.array((620, 625, 630, 635, 640))
+wavelength_array=np.array((620e-9, 625e-9, 630e-9, 635e-9, 640e-9))
 #%%
 def n_eff(x):
     xn=np.array(x)
@@ -35,10 +35,10 @@ print(Waveguide_dispersion)
 'Alternative method'
 #%%
 
-def D(f, x, h=1.e-9, *params):
+def D(f, x, h=1.e-12, *params):
     return (f(x+h, *params)-f(x-h, *params))/(2*h)
 
-def D2(f, x, h=1.e-9, *params):
+def D2(f, x, h=1.e-12, *params):
     d1=D(f,x,h, *params)
     return D(d1, x)
 #%%
@@ -52,11 +52,11 @@ def seconddev(f, x, n, dx, *params):
     return ((2*(step)-minus)/(dx*2)).mean()
 #%%
 
-secondddd=seconddev(n_eff, wavelength_array, 3, 0.0001)
+secondddd=seconddev(n_eff, wavelength_array, 3, 0.0000000000000001)
 print(secondddd)
 
 #%%
-Waveguide_dispersion=D_w(wavelength, secondddd)/1000
+Waveguide_dispersion=D_w(wavelength, secondddd)/1000000
 
 print(Waveguide_dispersion)
 #%%

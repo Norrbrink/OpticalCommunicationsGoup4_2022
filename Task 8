@@ -83,12 +83,17 @@ def inte_sup(r): #Integrande for the cladding
 frac_core = scipy.integrate.quad(inte_inf,0,a)
 frac_cladding = scipy.integrate.quad(inte_sup,a,a*10)
 
+#%%
+print((n_eff_approx(n1, n2, 0.78)+n_eff_approx(n1, n2, 0.22)/2))
+
 '''
 Output of scipy.integrate.quad is (result,error)
 In an ideal world, frac_core[0]+frac_cladding[0] = total (which should be the integral of what you calculated task 6)
 and then Gamma_core = frac_core/total and Gamma_cladding = 1 - Gamma_core
 
 frac_core = 0.22
-frac_cladding = 078
+frac_cladding = 0.78
 
 '''
+
+# %%
