@@ -182,8 +182,8 @@ r_core = np.linspace(0, a, 1000) # Array of radii for plotting values r<a
 r_clad = np.linspace(a, 3*a, 1000) # Array of radii for plotting values r>a
 phi = np.linspace(0, 2*np.pi, 1000)  # Array of angles between 0 and 2pi
 
-R_CORE, PHI = np.meshgrid(r_core, phi) #Meshgrid for 3D plotting
-R_CLAD, PHI_CLAD = np.meshgrid(r_clad, phi) #Meshgrid for 3D plotting
+R_CORE, PHI = np.meshgrid(r_core, phi) #Meshgrid for 2D plotting
+R_CLAD, PHI_CLAD = np.meshgrid(r_clad, phi) #Meshgrid for 2D plotting
 
 m = 1 #mode
 j = 2 
@@ -219,24 +219,6 @@ E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*
 titles = ['Electric Field Projection in z', 'Electric Field Projection in r', 'Electric Field Projection in Phi']
 
 
-
-def plot_3D(E, title): #plotting function
-    ER_CORE, E_CLAD = E
- 
-    ax = plt.axes(projection='3d')
-    ax.set_title(title)
-    ax.contour3D(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE, cmap='binary')
-    ax.contour3D(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD, cmap='binary')
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel(r'Electric Field Strength $V m^{-1}$')
-    ax.view_init(30, 30)
-    plt.show()
-
-#for i in range(3):
-    #plot_3D(E[i], titles[i])
-    #plt.show()
- 
 #%%
 'Task 5: Plot Electric Field Projections'
 def plot_2D(E, title): #plotting function in 2D 
