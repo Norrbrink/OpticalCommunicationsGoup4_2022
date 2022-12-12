@@ -2,7 +2,7 @@
 """
 Main Code File that produces all the results of our Project
 """
-#%%
+#%% Importing packages
 import numpy as np
 import scipy.special
 import matplotlib.pyplot as plt
