@@ -16,9 +16,9 @@ import matplotlib as mpl
 mpl.rcParams.update({'font.size': 20, 'font.family': 'Times New Roman'})
 #%% 
 # Initial Parameters
-n1 = 1.48
-n2 = 1.47
-a = 3.5e-6
+n1 = 1.48 #refractive index in core
+n2 = 1.47 #refractive index in cladding
+a = 3.5e-6 #radius of core
 wavelength = 630e-9
 k0 = 2*np.pi/wavelength
 mu0 = 4e-7*np.pi
@@ -41,7 +41,7 @@ qa= q*a
 #%% Procuring inital guesses using a graphical method
 def plotmode(m, pmp=True, TE=True):
     """
-    We used this function to find our intial guessses for solving equation XXX
+    We used this function to find our intial guessses for solving equation 4 (in methods document)
     m is the order of the mode
     pmp incicates if it is a plus minus plus (pmp) or minus plus minus (mpm) solution
     TE describes the type of mode (TE True models for when TE dominates so TE and HE, TE False models for when TM dominates so TM and EH)
@@ -198,8 +198,7 @@ KM = scipy.special.kv(m, q*a)
 JMprime = scipy.special.jvp(m, p*a)
 KMprime = scipy.special.kvp(m, q*a)
 
-#matrix to be solved to determine the A, B, C, D vector
-'based on page 6 equations'
+#matrix to be solved to determine the A, B, C, D vector, see equation 14 and 15 in methods document
 mat = [[JM, 0, -KM, 0], [0, JM, 0,  -KM], [1j*m*beta/(a*p**2)*JM, -mu0*omega/p*JMprime, 1j*m*k0/(a*q**2)*KM, -mu0*omega/q*KMprime], [e0*n1**2*omega/p*JMprime, 1j*m*beta/(a*p**2)*JM, e0*n2**2*omega/q*KMprime, -1j*m*beta/(a*q**2)*KM]]
 
 A = 1 #Setting A = 1, to determine B, C and D
@@ -208,7 +207,7 @@ twoDmat = [[-mu0*omega/p*JMprime, -mu0*omega/q*KMprime], [1j*m*beta/(a*p**2)*JM,
 B, D = np.linalg.solve(twoDmat, [A*1j*m*beta/(a*p**2)*JM + C*1j*m*k0/(a*q**2)*KM, A*e0*n1**2*omega/p*JMprime + C*e0*n2**2*omega/q*KMprime])
 vector = [A, B, C, D]
 #%%
-#Defining Electric Field Strength of the projections
+#Defining Electric Field Strength of the projections, as defined by equation 9 in methods document
 'E = Field in z, field in r core, field in r cladding, field in phi core, field in phi cladding'
 E = [[A*scipy.special.jv(m, p*R_CORE)*np.exp(1j*m*PHI), C*scipy.special.kv(m, p*R_CLAD)*np.exp(1j*m*PHI_CLAD)],  #field in Z 
      
@@ -318,7 +317,7 @@ def inte_inf(r): #Integrande for the core (the 2*pi is simplified)
 def inte_sup(r): #Integrande for the cladding
     return r*I_sup_a(r)
 
-#Integration
+#Integration based on equation 17 from methods document
 intensitytot_core = scipy.integrate.quad(inte_inf,0,a) #Output of scipy.integrate.quad is (result,error)
 intensitytot_cladding= scipy.integrate.quad(inte_sup,a,a*10)
 frac_core = intensitytot_core[0]/(intensitytot_core[0] + intensitytot_cladding[0])
