@@ -84,7 +84,10 @@ for i in range(0, 1):
 # Note TE True models for when TE dominates so TE and HE
 # Note TE False models for when TM dominates so TM and EH
 
-table_task3 = pd.read_csv('new_table_task3.csv')
+d = {'Mode': pd.Series(['TE', 'TE', 'HE', 'HE', 'HE', 'HE', 'HE', 'HE', 'TM', 'TM', 'EH', 'EH', 'EH', 'EH']), 'sign' :  pd.Series(['pmp', 'pmp', 'mpm', 'mpm', 'mpm', 'mpm', 'mpm', 'mpm', 'pmp', 'pmp', 'pmp', 'pmp', 'pmp', 'pmp']),'m': pd.Series([0, 0,1,1,2,2,3,4,0,0,1,1,0,0]), 'j': pd.Series([1,2,1,2,1,2,1,1,1,2,1,1,0,0]), 'Initial guess': pd.Series([3.3, 5.7, 2.1, 4.6, 3.2, 5.7, 4.4, 5.3, 3.3, 5.7, 4.3, 5.3, 0, 0])}
+
+table_task3 = pd.DataFrame(data=d, index=[0, 1, 2, 3, 4,5,6,7,8,9,10,11,12,13])          
+
 modes_type = table_task3.loc[:,"Mode"]
 
 pa_results = []
