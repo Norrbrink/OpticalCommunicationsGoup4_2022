@@ -2,7 +2,7 @@
 """
 Main Code File that produces all the results of our Project
 """
-#%% Importing packages
+#%% Importing Packages
 import numpy as np
 import scipy.special
 import matplotlib.pyplot as plt
@@ -11,6 +11,9 @@ import pandas as pd
 from scipy.misc import derivative
 import scipy.integrate
 
+import matplotlib as mpl
+
+mpl.rcParams.update({'font.size': 20, 'font.family': 'Times New Roman'})
 #%% 
 # Initial Parameters
 n1 = 1.48
@@ -227,7 +230,7 @@ def plot_2D(E, title): #plotting function in 2D
     fig = plt.figure(figsize=(6,5))
     left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
     ax = fig.add_axes([left, bottom, width, height]) 
-    ax.set_title(title)
+    #ax.set_title(title)
     plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), ER_CORE, cmap= 'bwr', levels = 50)
     plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD, cmap= 'bwr', levels = 50)
     ax.set_xlabel('x')
@@ -235,7 +238,7 @@ def plot_2D(E, title): #plotting function in 2D
     ax.set_xlim(-3*a, 3*a)
     ax.set_ylim(-3*a, 3*a)
     cbar =plt.colorbar(plot_task5)
-    cbar.set_label(r'Electric Field Strength, $V m^{-1}$')
+    cbar.set_label(r'Electric Field Strength, V m$^{-1}$')
     plt.show()
 
 for i in range(len(E)):
@@ -253,7 +256,7 @@ def plot_intensity(E, title): #plotting function in 2D
     fig = plt.figure(figsize=(6,5))
     left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
     ax = fig.add_axes([left, bottom, width, height]) 
-    ax.set_title(title)
+    #ax.set_title(title)
     plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), inten_core, levels= 25)
     plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), inten_cladding, levels=25)
     
@@ -262,7 +265,7 @@ def plot_intensity(E, title): #plotting function in 2D
     ax.set_xlim(-3*a, 3*a)
     ax.set_ylim(-3*a, 3*a)
     cbar = plt.colorbar(plot_task5)
-    cbar.set_label(r'Intensity, W m^{-2}')
+    cbar.set_label(r'Intensity, W m$^{-2}$')
     plt.show()
 
 
@@ -321,3 +324,4 @@ frac_core = intensitytot_core[0]/(intensitytot_core[0] + intensitytot_cladding[0
 frac_cladding = intensitytot_cladding[0]/(intensitytot_core[0] + intensitytot_cladding[0])
 
 n_eff = np.sqrt(n1**2*frac_core +n2**2*frac_cladding) #Effective index approximation 
+
