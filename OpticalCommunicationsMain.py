@@ -323,5 +323,6 @@ intensitytot_cladding= scipy.integrate.quad(inte_sup,a,a*10)
 frac_core = intensitytot_core[0]/(intensitytot_core[0] + intensitytot_cladding[0])
 frac_cladding = intensitytot_cladding[0]/(intensitytot_core[0] + intensitytot_cladding[0])
 
-n_eff = np.sqrt(n1**2*frac_core +n2**2*frac_cladding) #Effective index approximation 
+#Effective index approximation based on equation 18 from methods document
+n_eff = np.sqrt(n1**2*frac_core +n2**2*frac_cladding) 
 
