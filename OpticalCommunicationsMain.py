@@ -44,7 +44,7 @@ def plotmode(m, pmp=True, TE=True):
     We used this function to find our intial guessses for solving equation XXX
     m is the order of the mode
     pmp incicates if it is a plus minus plus (pmp) or minus plus minus (mpm) solution
-    TE describes the type of mode
+    TE describes the type of mode (TE True models for when TE dominates so TE and HE, TE False models for when TM dominates so TM and EH)
     """
     Jm = scipy.special.jv(m, pa) 
     Km = scipy.special.kv(m, qa)
@@ -78,11 +78,9 @@ for i in range(0, 1):
     plotmode(i, False, False) #TM mpm
     
 #%%
-# Determination of precis locations based on the positions found from the graphical method 
-# It takes data from new_table_task3 as an input, which was made based on our graphs
+# Determination of precise locations based on the positions found from the graphical method 
+# The dataframe d is taken an input, which was made based on our graphs 
 # It ouputs a Final table new with all the beta values and progation constant for Task 3
-# Note TE True models for when TE dominates so TE and HE
-# Note TE False models for when TM dominates so TM and EH
 
 d = {'Mode': pd.Series(['TE', 'TE', 'HE', 'HE', 'HE', 'HE', 'HE', 'HE', 'TM', 'TM', 'EH', 'EH', 'EH', 'EH']), 'sign' :  pd.Series(['pmp', 'pmp', 'mpm', 'mpm', 'mpm', 'mpm', 'mpm', 'mpm', 'pmp', 'pmp', 'pmp', 'pmp', 'pmp', 'pmp']),'m': pd.Series([0, 0,1,1,2,2,3,4,0,0,1,1,0,0]), 'j': pd.Series([1,2,1,2,1,2,1,1,1,2,1,1,0,0]), 'Initial guess': pd.Series([3.3, 5.7, 2.1, 4.6, 3.2, 5.7, 4.4, 5.3, 3.3, 5.7, 4.3, 5.3, 0, 0])}
 
