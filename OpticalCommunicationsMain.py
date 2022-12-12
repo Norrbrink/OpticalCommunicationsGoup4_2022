@@ -321,11 +321,3 @@ frac_core = intensitytot_core[0]/(intensitytot_core[0] + intensitytot_cladding[0
 frac_cladding = intensitytot_cladding[0]/(intensitytot_core[0] + intensitytot_cladding[0])
 
 n_eff = np.sqrt(n1**2*frac_core +n2**2*frac_cladding) #Effective index approximation 
-
-'''
-Output :
-frac_core = 0.22
-frac_cladding = 078
-n_eff = 1.4722   
-n_eff value different from the other effective index value. Possible reason : Intensity not a gaussian, meaning the formula is not totally correct.
-'''
