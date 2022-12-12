@@ -2,7 +2,7 @@
 """
 Main Code File that produces all the results of our Project
 """
-#%% Importing packages
+#%%
 import numpy as np
 import scipy.special
 import matplotlib.pyplot as plt
@@ -179,7 +179,7 @@ q = np.sqrt(beta**2 - (n2*k0)**2)
 neff = beta/k0
 
 r_core = np.linspace(0, a, 1000) # Array of radii for plotting values r<a
-r_clad = np.linspace(a, 3*a, 1000) # Array of radii for plotting values r>a
+r_clad = np.linspace(a, 5*a, 1000) # Array of radii for plotting values r>a
 phi = np.linspace(0, 2*np.pi, 1000)  # Array of angles between 0 and 2pi
 
 R_CORE, PHI = np.meshgrid(r_core, phi) #Meshgrid for 2D plotting
@@ -232,7 +232,10 @@ def plot_2D(E, title): #plotting function in 2D
     plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), E_CLAD, cmap= 'bwr', levels = 50)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
-    plt.colorbar(plot_task5)
+    ax.set_xlim(-3*a, 3*a)
+    ax.set_ylim(-3*a, 3*a)
+    cbar =plt.colorbar(plot_task5)
+    cbar.set_label(r'Electric Field Strength, $V m^{-1}$')
     plt.show()
 
 for i in range(len(E)):
@@ -251,15 +254,15 @@ def plot_intensity(E, title): #plotting function in 2D
     left, bottom, width, height = 0.1, 0.1, 0.8, 0.8
     ax = fig.add_axes([left, bottom, width, height]) 
     ax.set_title(title)
-    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), inten_core)
-    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), inten_cladding)
+    plot_task5 = plt.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), inten_core, levels= 25)
+    plt.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), inten_cladding, levels=25)
     
-    ax.contourf(R_CORE*np.cos(PHI), R_CORE*np.sin(PHI), inten_core)
-    ax.contourf(R_CLAD*np.cos(PHI), R_CLAD*np.sin(PHI), inten_cladding)
     ax.set_xlabel('x')
     ax.set_ylabel('y')
-    
-    plt.colorbar(plot_task5)
+    ax.set_xlim(-3*a, 3*a)
+    ax.set_ylim(-3*a, 3*a)
+    cbar = plt.colorbar(plot_task5)
+    cbar.set_label(r'Intensity, W m^{-2}')
     plt.show()
 
 
@@ -299,11 +302,11 @@ def I_sup_a(r): #Er and Ephi for r>a
 
 
 #Plotting the sum of the square modulus
-r1 = np.linspace(0,a,1000)
-r2 = np.linspace(a,10*a,1000)
-plt.plot(r1, I_inf_a(r1), color='r')
-plt.plot(r2, I_sup_a(r2), color='b')
-plt.show()
+#r1 = np.linspace(0,a,1000)
+#r2 = np.linspace(a,10*a,1000)
+#plt.plot(r1, I_inf_a(r1), color='r')
+#plt.plot(r2, I_sup_a(r2), color='b')
+#plt.show()
 
 
 def inte_inf(r): #Integrande for the core (the 2*pi is simplified)
@@ -323,7 +326,6 @@ n_eff = np.sqrt(n1**2*frac_core +n2**2*frac_cladding) #Effective index approxima
 Output :
 frac_core = 0.22
 frac_cladding = 078
-
 n_eff = 1.4722   
 n_eff value different from the other effective index value. Possible reason : Intensity not a gaussian, meaning the formula is not totally correct.
 '''
